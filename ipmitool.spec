@@ -1,6 +1,6 @@
 %define	name	ipmitool
 %define	version	1.8.9
-%define release	%mkrel 2
+%define release	%mkrel 3
 %define	lib_major	1
 %define	lib_name	%mklibname %{name} %{lib_major}
 
@@ -13,7 +13,7 @@ License:	    GPL
 Group:		    System/Kernel and hardware
 Url:		    http://ipmitool.sourceforge.net/ 
 Requires:	    IPMI
-BuildRequires:	freeipmi-devel
+BuildRequires:	    freeipmi-devel, openssl-devel
 BuildRoot:	    %{_tmppath}/%{name}-%{version}
 
 %description
