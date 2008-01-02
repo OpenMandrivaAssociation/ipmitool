@@ -14,6 +14,7 @@ Group:		    System/Kernel and hardware
 Url:		    http://ipmitool.sourceforge.net/ 
 Requires:	    IPMI
 BuildRequires:	    freeipmi-devel, openssl-devel
+BuildRoot:	    %{_tmppath}/%{name}-%{version}
 
 %description
 IPMI stands for Intelligent Platform Management Interface 
