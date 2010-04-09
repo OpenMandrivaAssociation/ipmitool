@@ -1,6 +1,6 @@
 %define	name	ipmitool
 %define	version	1.8.11
-%define release	%mkrel 5
+%define release	%mkrel 6
 %define	lib_major	1
 %define	lib_name	%mklibname %{name} %{lib_major}
 
