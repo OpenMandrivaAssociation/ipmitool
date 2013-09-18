@@ -1,12 +1,12 @@
 Summary:	Utility for interfacing with IPMI devices
 Name:		ipmitool
-Version:	1.8.11
-Release:	12
+Version:	1.8.13
+Release:	1
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://ipmitool.sourceforge.net/
-Source0:	http://optusnet.dl.sourceforge.net/sourceforge/ipmitool/%{name}-%{version}.tar.gz
-Patch0:		ipmitool-1.8.10-fix-format-error.patch
+Source0:	http://optusnet.dl.sourceforge.net/sourceforge/ipmitool/%{name}-%{version}.tar.bz2
+#Patch0:		ipmitool-1.8.10-fix-format-error.patch
 Patch1:		ipmitool-1.8.11-CVE-2011-4339.diff
 ExcludeArch:	%arm %mips
 
