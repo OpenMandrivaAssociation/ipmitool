@@ -1,7 +1,7 @@
 Summary:	Utility for interfacing with IPMI devices
 Name:		ipmitool
 Version:	1.8.13
-Release:	4
+Release:	5
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://ipmitool.sourceforge.net/
