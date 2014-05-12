@@ -1,4 +1,5 @@
 removed_sources:
   ipmitool-1.8.11.tar.gz: 4cb6ff3736fd3e166abc5303d6373672327a5db1
-sources:
   ipmitool-1.8.13.tar.bz2: 22254a2b814c8cd323866a4dd835e390521c1dfa
+sources:
+  ipmitool-1.8.14.tar.bz2: 16ff9c4e386ac26bee3de161bcaeb90c9bf8cca1
