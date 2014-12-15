@@ -1,12 +1,12 @@
 Summary:	Utility for interfacing with IPMI devices
 
 Name:		ipmitool
-Version:	1.8.14
-Release:	4
+Version:	1.8.15
+Release:	1
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://ipmitool.sourceforge.net/
-Source0:	http://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.14/%{name}-%{version}.tar.bz2
+Source0:	http://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.15/%{name}-%{version}.tar.bz2
 #Patch0:		ipmitool-1.8.10-fix-format-error.patch
 Patch1:		ipmitool-1.8.11-CVE-2011-4339.diff
 ExcludeArch:	%arm %mips
@@ -51,5 +51,3 @@ rm -rf %{buildroot}%{_docdir}/%{name}
 %{_mandir}/man1/*
 %{_mandir}/man8/*
 %{_datadir}/ipmitool
-
-
