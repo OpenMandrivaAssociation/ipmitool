@@ -2,7 +2,7 @@ Summary:	Utility for interfacing with IPMI devices
 
 Name:		ipmitool
 Version:	1.8.15
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		http://ipmitool.sourceforge.net/
@@ -30,7 +30,7 @@ LAN configuration, sensor readings, and remote chassis power control.
 %apply_patches
 
 %build
-%configure2_5x \
+%configure \
 	--enable-ipmievd \
 	--enable-intf-lan \
 	--enable-intf-open \
