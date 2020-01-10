@@ -28,7 +28,7 @@ LAN configuration, sensor readings, and remote chassis power control.
 
 %prep
 %setup -q
-%apply_patches
+%autopatch -p1
 
 %build
 %configure \
