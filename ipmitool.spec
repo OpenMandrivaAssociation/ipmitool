@@ -1,13 +1,14 @@
-Summary:	Utility for interfacing with IPMI devices
+%define uversion %(echo %{version} | sed -e 's,\\.,_,g')
 
+Summary:	Utility for interfacing with IPMI devices
 Name:		ipmitool
-Version:	1.8.15
-Release:	6
+Version:	1.8.18
+Release:	1
 License:	GPLv2
 Group:		System/Kernel and hardware
-Url:		http://ipmitool.sourceforge.net/
-Source0:	http://sourceforge.net/projects/ipmitool/files/ipmitool/1.8.15/%{name}-%{version}.tar.bz2
-#Patch0:		ipmitool-1.8.10-fix-format-error.patch
+Url:		https://github.com/ipmitool/ipmitool
+Source0:	https://github.com/ipmitool/ipmitool/releases/download/IPMITOOL_%{uversion}/ipmitool-%{version}.tar.bz2
+Patch0:		ipmitool-1.8.18-compile.patch
 Patch1:		ipmitool-1.8.11-CVE-2011-4339.diff
 ExcludeArch:	%arm %mips
 
@@ -27,10 +28,7 @@ These functions include printing FRU(Field Replaceable Unit) information,
 LAN configuration, sensor readings, and remote chassis power control. 
 
 %prep
-%setup -q
-%autopatch -p1
-
-%build
+%autosetup -p1
 %configure \
 	--enable-ipmievd \
 	--enable-intf-lan \
@@ -38,10 +36,12 @@ LAN configuration, sensor readings, and remote chassis power control.
 	--enable-intf-lanplus \
 	--with-kerneldir=/usr/src/linux \
 	--with-plugin-path=%{_libdir}/ipmitool
-make
+
+%build
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 rm -rf %{buildroot}%{_docdir}/%{name}
 

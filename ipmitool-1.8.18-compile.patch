@@ -1,0 +1,109 @@
+diff -up ipmitool-1.8.18/include/ipmitool/ipmi_hpmfwupg.h.omv~ ipmitool-1.8.18/include/ipmitool/ipmi_hpmfwupg.h
+--- ipmitool-1.8.18/include/ipmitool/ipmi_hpmfwupg.h.omv~	2021-03-17 23:11:10.082541348 +0100
++++ ipmitool-1.8.18/include/ipmitool/ipmi_hpmfwupg.h	2021-03-17 23:11:24.774626959 +0100
+@@ -800,7 +800,7 @@ typedef struct _VERSIONINFO {
+ 	char descString[HPMFWUPG_DESC_STRING_LENGTH + 1];
+ }VERSIONINFO, *PVERSIONINFO;
+ 
+-VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
++extern VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
+ 
+ #define TARGET_VER (0x01)
+ #define ROLLBACK_VER (0x02)
+diff -up ipmitool-1.8.18/lib/ipmi_hpmfwupg.c.omv~ ipmitool-1.8.18/lib/ipmi_hpmfwupg.c
+--- ipmitool-1.8.18/lib/ipmi_hpmfwupg.c.omv~	2021-03-17 23:11:44.914744238 +0100
++++ ipmitool-1.8.18/lib/ipmi_hpmfwupg.c	2021-03-17 23:11:54.602800622 +0100
+@@ -52,6 +52,8 @@
+ # include <config.h>
+ #endif
+ 
++VERSIONINFO gVersionInfo[HPMFWUPG_COMPONENT_ID_MAX];
++
+ /* From src/plugins/ipmi_intf.c: */
+ uint16_t
+ ipmi_intf_get_max_request_data_size(struct ipmi_intf * intf);
+diff -up ipmitool-1.8.18/src/plugins/lanplus/lanplus_crypt_impl.c.omv~ ipmitool-1.8.18/src/plugins/lanplus/lanplus_crypt_impl.c
+--- ipmitool-1.8.18/src/plugins/lanplus/lanplus_crypt_impl.c.omv~	2021-03-17 23:05:04.144388628 +0100
++++ ipmitool-1.8.18/src/plugins/lanplus/lanplus_crypt_impl.c	2021-03-17 23:10:20.088249650 +0100
+@@ -164,10 +164,9 @@ lanplus_encrypt_aes_cbc_128(const uint8_
+ 							uint8_t       * output,
+ 							uint32_t        * bytes_written)
+ {
+-	EVP_CIPHER_CTX ctx;
+-	EVP_CIPHER_CTX_init(&ctx);
+-	EVP_EncryptInit_ex(&ctx, EVP_aes_128_cbc(), NULL, key, iv);
+-	EVP_CIPHER_CTX_set_padding(&ctx, 0);
++	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
++	EVP_EncryptInit_ex(ctx, EVP_aes_128_cbc(), NULL, key, iv);
++	EVP_CIPHER_CTX_set_padding(ctx, 0);
+ 	
+ 
+ 	*bytes_written = 0;
+@@ -191,7 +190,7 @@ lanplus_encrypt_aes_cbc_128(const uint8_
+ 	assert((input_length % IPMI_CRYPT_AES_CBC_128_BLOCK_SIZE) == 0);
+ 
+ 
+-	if(!EVP_EncryptUpdate(&ctx, output, (int *)bytes_written, input, input_length))
++	if(!EVP_EncryptUpdate(ctx, output, (int *)bytes_written, input, input_length))
+ 	{
+ 		/* Error */
+ 		*bytes_written = 0;
+@@ -201,7 +200,7 @@ lanplus_encrypt_aes_cbc_128(const uint8_
+ 	{
+ 		uint32_t tmplen;
+ 
+-		if(!EVP_EncryptFinal_ex(&ctx, output + *bytes_written, (int *)&tmplen))
++		if(!EVP_EncryptFinal_ex(ctx, output + *bytes_written, (int *)&tmplen))
+ 		{
+ 			*bytes_written = 0;
+ 			return; /* Error */
+@@ -210,7 +209,7 @@ lanplus_encrypt_aes_cbc_128(const uint8_
+ 		{
+ 			/* Success */
+ 			*bytes_written += tmplen;
+-			EVP_CIPHER_CTX_cleanup(&ctx);
++			EVP_CIPHER_CTX_free(ctx);
+ 		}
+ 	}
+ }
+@@ -239,10 +238,9 @@ lanplus_decrypt_aes_cbc_128(const uint8_
+ 							uint8_t       * output,
+ 							uint32_t        * bytes_written)
+ {
+-	EVP_CIPHER_CTX ctx;
+-	EVP_CIPHER_CTX_init(&ctx);
+-	EVP_DecryptInit_ex(&ctx, EVP_aes_128_cbc(), NULL, key, iv);
+-	EVP_CIPHER_CTX_set_padding(&ctx, 0);
++	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
++	EVP_DecryptInit_ex(ctx, EVP_aes_128_cbc(), NULL, key, iv);
++	EVP_CIPHER_CTX_set_padding(ctx, 0);
+ 
+ 
+ 	if (verbose >= 5)
+@@ -266,7 +264,7 @@ lanplus_decrypt_aes_cbc_128(const uint8_
+ 	assert((input_length % IPMI_CRYPT_AES_CBC_128_BLOCK_SIZE) == 0);
+ 
+ 
+-	if (!EVP_DecryptUpdate(&ctx, output, (int *)bytes_written, input, input_length))
++	if (!EVP_DecryptUpdate(ctx, output, (int *)bytes_written, input, input_length))
+ 	{
+ 		/* Error */
+ 		lprintf(LOG_DEBUG, "ERROR: decrypt update failed");
+@@ -277,7 +275,7 @@ lanplus_decrypt_aes_cbc_128(const uint8_
+ 	{
+ 		uint32_t tmplen;
+ 
+-		if (!EVP_DecryptFinal_ex(&ctx, output + *bytes_written, (int *)&tmplen))
++		if (!EVP_DecryptFinal_ex(ctx, output + *bytes_written, (int *)&tmplen))
+ 		{
+ 			char buffer[1000];
+ 			ERR_error_string(ERR_get_error(), buffer);
+@@ -290,7 +288,7 @@ lanplus_decrypt_aes_cbc_128(const uint8_
+ 		{
+ 			/* Success */
+ 			*bytes_written += tmplen;
+-			EVP_CIPHER_CTX_cleanup(&ctx);
++			EVP_CIPHER_CTX_free(ctx);
+ 		}
+ 	}
+ 
