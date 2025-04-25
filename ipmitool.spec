@@ -2,15 +2,12 @@
 
 Summary:	Utility for interfacing with IPMI devices
 Name:		ipmitool
-Version:	1.8.18
-Release:	2
+Version:	1.8.19
+Release:	1
 License:	GPLv2
 Group:		System/Kernel and hardware
 Url:		https://github.com/ipmitool/ipmitool
-Source0:	https://github.com/ipmitool/ipmitool/releases/download/IPMITOOL_%{uversion}/ipmitool-%{version}.tar.bz2
-Patch0:		ipmitool-1.8.18-compile.patch
-Patch1:		ipmitool-1.8.11-CVE-2011-4339.diff
-ExcludeArch:	%arm %mips
+Source0:	https://github.com/ipmitool/ipmitool/archive/refs/tags/IPMITOOL_%{uversion}.tar.gz
 
 BuildRequires:	pkgconfig(libfreeipmi)
 BuildRequires:	pkgconfig(openssl)
@@ -28,7 +25,10 @@ These functions include printing FRU(Field Replaceable Unit) information,
 LAN configuration, sensor readings, and remote chassis power control. 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{name}-IPMITOOL_%{uversion}
+./bootstrap
+
+%conf
 %configure \
 	--enable-ipmievd \
 	--enable-intf-lan \
