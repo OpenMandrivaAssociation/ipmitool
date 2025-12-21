@@ -9,6 +9,11 @@ Group:		System/Kernel and hardware
 Url:		https://github.com/ipmitool/ipmitool
 Source0:	https://github.com/ipmitool/ipmitool/archive/refs/tags/IPMITOOL_%{uversion}.tar.gz
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(libfreeipmi)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	readline-devel
